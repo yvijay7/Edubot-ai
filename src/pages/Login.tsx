@@ -44,7 +44,7 @@ const Login = () => {
           options: { data: { full_name: name }, emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast({ title: "Account created!", description: "Check your email to verify your account." });
+        toast({ title: "Account created!", description: "Welcome to EduBot AI! 🎉" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
