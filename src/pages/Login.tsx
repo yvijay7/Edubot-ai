@@ -47,10 +47,30 @@ const Login = () => {
         toast({ title: "Account created!", description: "Welcome to EduBot AI! 🎉" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          if (error.message === "Invalid login credentials") {
+            toast({ 
+              title: "Login failed", 
+              description: "गलत email या password। अगर आपने Google से signup किया था तो Google button use करें।", 
+              variant: "destructive" 
+            });
+          } else {
+            toast({ title: "Error", description: error.message, variant: "destructive" });
+          }
+          setLoading(false);
+          return;
+        }
       }
     } catch (error: any) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      if (error.message?.includes("User already registered")) {
+        toast({ 
+          title: "Account already exists", 
+          description: "इस email से पहले से account है। Login करें या Google button use करें।", 
+          variant: "destructive" 
+        });
+      } else {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      }
     }
     setLoading(false);
   };
